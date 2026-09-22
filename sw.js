@@ -1,8 +1,11 @@
 // 河口湖・東京・橫濱行程 App - 離線快取
-// 策略：同源(GitHub Pages上你自己的檔案)一律「有快取先用快取，同時背景更新」；
-// 外部資源(Google字型、天氣API)失敗時不影響離線使用，交給頁面本身的容錯處理。
+// 策略：每次都讓瀏覽器向伺服器「驗證」目前版本是否還是最新
+// （用標準 HTTP 快取驗證機制 cache:'no-cache'）：
+//   - 內容沒變 → 伺服器只回一個很小的「沒變」訊號(304)，速度跟直接讀快取差不多
+//   - 內容有變 → 才會真的抓新版本回來(200)並更新快取
+// 只有真的離線、完全連不上網路時，才退回用 Service Worker 自己存的快取頂著用。
 
-const CACHE_NAME = 'kawaguchi-trip-cache-v1';
+const CACHE_NAME = 'kawaguchi-trip-cache-v4';
 
 self.addEventListener('install', function(event) {
   self.skipWaiting();
@@ -24,24 +27,23 @@ self.addEventListener('fetch', function(event) {
   if (event.request.method !== 'GET') return;
 
   var url = new URL(event.request.url);
-  // 只快取同源的檔案(你自己GitHub Pages上的html/css/js/圖示)
+  // 只處理同源的檔案(你自己GitHub Pages上的html/css/js/圖示)
   if (url.origin !== self.location.origin) return;
 
   event.respondWith(
-    caches.match(event.request).then(function(cached) {
-      var fetchPromise = fetch(event.request).then(function(networkResponse) {
-        if (networkResponse && networkResponse.status === 200) {
-          var clone = networkResponse.clone();
-          caches.open(CACHE_NAME).then(function(cache) {
-            cache.put(event.request, clone);
-          });
-        }
-        return networkResponse;
-      }).catch(function() {
-        return cached;
-      });
-      // 有快取先秒開，背景仍會更新快取；沒快取才等網路
-      return cached || fetchPromise;
+    // cache:'no-cache' 會強迫瀏覽器每次都跟伺服器「確認」一下版本，
+    // 沒變的話伺服器回應很小、很快；有變才會真的下載新內容。
+    fetch(event.request, { cache: 'no-cache' }).then(function(networkResponse) {
+      if (networkResponse && networkResponse.status === 200) {
+        var clone = networkResponse.clone();
+        caches.open(CACHE_NAME).then(function(cache) {
+          cache.put(event.request, clone);
+        });
+      }
+      return networkResponse;
+    }).catch(function() {
+      // 真的斷網、連驗證都連不上，才退回用之前存的快取版本
+      return caches.match(event.request);
     })
   );
 });
