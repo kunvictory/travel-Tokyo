@@ -1887,12 +1887,21 @@
       }
       return id;
     }
-    function getPlatform(){
-      var ua = navigator.userAgent || '';
-      if(/iPhone|iPad|iPod/.test(ua)) return 'iOS';
-      if(/Android/.test(ua)) return 'Android';
-      return '電腦';
+function getPlatform(){
+  var ua = navigator.userAgent || '';
+  if(/iPhone|iPad|iPod/.test(ua)){
+    var m = ua.match(/OS (\d+)[_.](\d+)(?:[_.](\d+))?/);
+    if(m){
+      return 'iOS ' + m[1] + '.' + m[2] + (m[3] ? ('.' + m[3]) : '');
     }
+    return 'iOS';
+  }
+  if(/Android/.test(ua)){
+    var am = ua.match(/Android (\d+(?:\.\d+)?)/);
+    return am ? ('Android ' + am[1]) : 'Android';
+  }
+  return '電腦';
+}    }
     window.__deviceId = getDeviceId();
     window.__devicePlatform = getPlatform();
 
