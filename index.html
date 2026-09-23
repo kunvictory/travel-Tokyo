@@ -1875,6 +1875,52 @@
 
 <!-- 2. 接著才放 Firebase 雲端即時同步版記帳邏輯 -->
 <script>
+  // ---------- 裝置ID + 平台紀錄 ----------
+  (function(){
+    function getDeviceId(){
+      var KEY = 'deviceId';
+      var id = null;
+      try{ id = localStorage.getItem(KEY); }catch(e){}
+      if(!id){
+        id = 'dev-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+        try{ localStorage.setItem(KEY, id); }catch(e){}
+      }
+      return id;
+    }
+    function getPlatform(){
+      var ua = navigator.userAgent || '';
+      if(/iPhone|iPad|iPod/.test(ua)){
+        var m = ua.match(/OS (\d+)[_.](\d+)(?:[_.](\d+))?/);
+        if(m){
+          return 'iOS ' + m[1] + '.' + m[2] + (m[3] ? ('.' + m[3]) : '');
+        }
+        return 'iOS';
+      }
+      if(/Android/.test(ua)){
+        var am = ua.match(/Android (\d+(?:\.\d+)?)/);
+        return am ? ('Android ' + am[1]) : 'Android';
+      }
+      return '電腦';
+    }
+    window.__deviceId = getDeviceId();
+    window.__devicePlatform = getPlatform();
+
+    function whenFirebaseReady(cb){
+      if(window.db){ cb(); }
+      else{ window.addEventListener('firebase-ready', cb, {once:true}); }
+    }
+    whenFirebaseReady(function(){
+      try{
+        var mods = window.firebaseFirestoreModules;
+        mods.addDoc(mods.collection(window.db, 'visits'), {
+          deviceId: window.__deviceId,
+          platform: window.__devicePlatform,
+          time: Date.now()
+        }).catch(function(){});
+      }catch(e){}
+    });
+  })();
+
   // ---------- 記帳（Firebase 雲端即時同步版） ----------
   (function(){
     const PEOPLE = ['小儀','阿琨','靜靜','東祐'];
@@ -2076,7 +2122,9 @@
             amount: amount,
             note: note,
             paidBy: paidBy || null,
-            createdAt: Date.now()
+            createdAt: Date.now(),
+            deviceId: window.__deviceId,
+            platform: window.__devicePlatform
           });
           document.getElementById('expAmount').value = '';
           document.getElementById('expNote').value = '';
