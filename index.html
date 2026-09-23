@@ -1509,7 +1509,48 @@
       switchDay(tab.dataset.target);
     });
   });
+  // ---------- 左右滑動切換Day ----------
+  (function(){
+    var container = document.getElementById('view-itinerary');
+    if(!container) return;
+    var dayOrder = ['day1','day2','day3','day4','day5','day6','day7','day8'];
+    var startX = 0, startY = 0, tracking = false;
 
+    function isExcluded(target){
+      return target.closest('.tabs-wrap') || target.closest('.hour-ruler');
+    }
+
+    container.addEventListener('touchstart', function(e){
+      if(e.touches.length !== 1) return;
+      if(isExcluded(e.target)){ tracking = false; return; }
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      tracking = true;
+    }, {passive:true});
+
+    container.addEventListener('touchend', function(e){
+      if(!tracking) return;
+      tracking = false;
+      var endX = e.changedTouches[0].clientX;
+      var endY = e.changedTouches[0].clientY;
+      var dx = endX - startX;
+      var dy = endY - startY;
+      // 滑動距離不夠、或偏垂直方向（代表在正常上下捲動），就不觸發切換
+      if(Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+
+      var activeDay = document.querySelector('.day.active');
+      if(!activeDay) return;
+      var idx = dayOrder.indexOf(activeDay.id);
+      if(idx === -1) return;
+
+      if(dx < 0 && idx < dayOrder.length - 1){
+        switchDay(dayOrder[idx + 1]); // 往左滑 → 下一天
+      }else if(dx > 0 && idx > 0){
+        switchDay(dayOrder[idx - 1]); // 往右滑 → 上一天
+      }
+    }, {passive:true});
+  })();
+  
   // ---------- 倒數計時 ----------
   // 出發時間：2026/10/31 08:25（本地時間）
   var departAt = new Date(2026, 9, 31, 8, 25, 0);
