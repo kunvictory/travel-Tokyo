@@ -140,6 +140,73 @@
     -webkit-tap-highlight-color:transparent;
   }
   .check-item:first-of-type{border-top:none;}
+
+  /* ---------- VJW 護照卡片樣式 ---------- */
+  .vjw-card{
+    display:block;position:relative;cursor:pointer;margin-bottom:16px;
+    background:linear-gradient(135deg,#2b2140,#4a3a68 45%,#8a3226);
+    border-radius:16px;padding:18px 20px 16px;color:#fff;
+    box-shadow:0 8px 20px rgba(43,33,64,.35);
+    -webkit-tap-highlight-color:transparent;
+    overflow:hidden;
+  }
+  .vjw-card:before{
+    content:'';position:absolute;top:-30%;right:-10%;width:70%;height:160%;
+    background:radial-gradient(circle, rgba(255,255,255,.08), transparent 60%);
+    pointer-events:none;
+  }
+  .vjw-card{border:1px solid rgba(255,255,255,.18);}
+  .vjw-card:after{
+    content:'';position:absolute;top:0;left:-150%;width:60%;height:100%;
+    background:linear-gradient(115deg,
+      transparent 0%,
+      rgba(255,255,255,0) 35%,
+      rgba(255,255,255,.16) 47%,
+      rgba(255,255,255,.32) 50%,
+      rgba(255,255,255,.16) 53%,
+      rgba(255,255,255,0) 65%,
+      transparent 100%);
+    pointer-events:none;
+    animation:vjwShine 5s ease-in-out infinite;
+  }
+  @keyframes vjwShine{
+    0%{left:-150%;}
+    35%{left:150%;}
+    100%{left:150%;}
+  }
+  }
+  .vjw-checkbox{position:absolute;opacity:0;pointer-events:none;}
+  .vjw-card-top{display:flex;align-items:center;justify-content:space-between;margin- bottom:14px;position:relative;z-index:2;}
+  .vjw-chip{
+    width:34px;height:26px;border-radius:5px;
+    background:linear-gradient(135deg,#e0c568,#b0872f);
+    display:flex;align-items:center;justify-content:center;font-size:14px;
+  }
+  .vjw-badge{
+    font-size:10px;letter-spacing:.12em;font-weight:700;color:rgba(255,255,255,.65);
+  }
+  .vjw-card-title{
+    font-size:19px;font-weight:800;letter-spacing:.03em;margin-bottom:3px;
+    font-family:'Noto Sans TC',sans-serif;
+    position:relative;z-index:2;
+  }
+  }
+  .vjw-card-sub{font-size:11.5px;color:rgba(255,255,255,.7);margin-bottom:16px;position:relative;z-index:2;}
+  .vjw-card-bottom{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1;}
+  .vjw-link{
+    font-size:12px;font-weight:700;color:#fff;text-decoration:none;
+    border:1.3px solid rgba(255,255,255,.5);padding:6px 13px;border-radius:999px;
+  }
+  .vjw-link:active{background:rgba(255,255,255,.15);}
+  .vjw-check-mark{
+    font-size:11px;font-weight:700;color:rgba(255,255,255,.4);
+    padding:5px 10px;border-radius:999px;border:1.3px solid rgba(255,255,255,.25);
+    transition:all .2s ease;
+  }
+  .vjw-checkbox:checked ~ .vjw-card-bottom .vjw-check-mark{
+    color:#fff;background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.6);
+  }
+  .vjw-checkbox:checked ~ .vjw-card-bottom{opacity:1;}
   .check-item input[type="checkbox"]{
     appearance:none;-webkit-appearance:none;
     flex:0 0 auto;width:20px;height:20px;margin:1px 0 0;
@@ -765,10 +832,10 @@
       </div>
       <div class="tip"><b>今日提醒　</b>行程橫跨原宿、涉谷、秋葉原、上野，範圍較大，建議依體力彈性刪減，不用每站都硬排；阿美橫町部分店家、居酒屋19:00後仍營業。</div>
       <ul class="timeline">
-        <li class="stop"><div class="stop-time">05:00<br><span>16:00</span></div><div class="stop-dot-wrap"><div class="stop-dot"></div></div>
+        <li class="stop"><div class="stop-time">09:00</div><div class="stop-dot-wrap"><div class="stop-dot"></div></div>
           <div class="stop-body"><div class="stop-head"><span class="tag tag-景點">景點</span><h4>明治神宮</h4></div>
           <p class="stop-addr">Meiji Jingu, Shibuya, Tokyo</p>
-          <div class="stop-metaline"><span>東京最具代表性神社之一，約10萬棵樹的神域，適合走走療癒淨化</span></div>
+          <div class="stop-metaline"><span>東京最具代表性神社之一，約10萬棵樹的神域，適合走走療癒淨化</span><span>開放時間05:00–16:00（依季節略有調整）</span></div>
           <a class="map-btn" href="https://www.google.com/maps/dir/?api=1&destination=Meiji+Jingu+Shrine" target="_blank" rel="noopener">🧭 開始導航</a></div></li>
 
         <li class="stop"><div class="stop-time">10:00<br><span>23:00</span></div><div class="stop-dot-wrap"><div class="stop-dot"></div></div>
@@ -818,8 +885,13 @@
           <p class="stop-addr">Aidaya, Taito City, Tokyo</p>
           <div class="stop-metaline"><span>營業10:30–15:00、17:30–20:45</span></div>
           <a class="map-btn" href="https://www.google.com/maps/dir/?api=1&destination=Aidaya+Taito+City" target="_blank" rel="noopener">🧭 開始導航</a></div></li>
-      </ul>
-    </div>
+
+        <li class="stop"><div class="stop-time">晚上</div><div class="stop-dot-wrap"><div class="stop-dot"></div></div>
+          <div class="stop-body"><div class="stop-head"><span class="tag tag-移動">移動</span><h4>返回大久保住宿</h4></div>
+          <p class="stop-addr">大久保・新宿區</p>
+          <div class="stop-metaline"><span>結束一天的東京市區行程</span></div>
+          <a class="map-btn" href="https://www.google.com/maps/dir/?api=1&destination=%E5%A4%A7%E4%B9%85%E4%BF%9D+%E6%96%B0%E5%AE%BF%E5%8D%80" target="_blank" rel="noopener">🧭 開始導航</a></div></li>
+      </ul>    </div>
   </section>
   <!-- DAY 4 -->
   <section class="day" id="day4" style="--accent:var(--d4)">
@@ -834,50 +906,62 @@
           <span class="wx-badge" id="wxDay4">🌡 讀取天氣中…</span>
         </div>
       </div>
-      <div class="route-chips">
-        <b>港未來21</b><span class="arrow">›</span><b>山手西洋館</b><span class="arrow">›</span><b>紅磚倉庫</b><span class="arrow">›</span><b>世界之窗</b><span class="arrow">›</span><b>麵包超人博物館</b>
+       <div class="route-chips">
+        <b>山手西洋館</b><span class="arrow">›</span><b>Elysee布丁</b><span class="arrow">›</span><b>麵包超人博物館     </b><span class="arrow">›</span><b>港未來21</b><span class="arrow">›</span><b>紅磚倉庫</b><span class="arrow">› </span><b>世界之窗</b>
       </div>
       <div class="hour-ruler" data-day="day4"></div>
       <div class="stat-row">
         <div>景點 <b>4</b></div><div>用餐 <b>1</b></div><div>購物 <b>1</b></div>
       </div>
       <div class="tip"><b>今日提醒　</b>Elysee Hikaru雞蛋布丁店星期三公休，若行程剛好落在週三請留意；回程後可視體力安排大久保周邊夜生活。</div>
-      <ul class="timeline">
-        <li class="stop"><div class="stop-time">全天</div><div class="stop-dot-wrap"><div class="stop-dot"></div></div>
-          <div class="stop-body"><div class="stop-head"><span class="tag tag-景點">景點</span><h4>港未來21（Minato Mirai 21）</h4></div>
-          <p class="stop-addr">Minato Mirai 21, Yokohama, Kanagawa</p>
-          <div class="stop-metaline"></div>
-          <a class="map-btn" href="https://www.google.com/maps/dir/?api=1&destination=Minato+Mirai+21+Yokohama" target="_blank" rel="noopener">🧭 開始導航</a></div></li>
+            <ul class="timeline">
+        <li class="stop"><div class="stop-time">上午</div><div class="stop-dot-wrap"><div class="stop-dot"></div></div>
+          <div class="stop-body"><div class="stop-head"><span class="tag tag-移動">移動</span><h4>大久保/新宿 → 橫濱（山手）</h4></div>
+          <p class="stop-addr">JR湘南新宿線直達，約33分</p>
+          <div class="stop-metaline"><span>🚆 建議先搭到石川町站，山手西洋館從這裡步行較近</span></div>
+          <a class="map-btn" href="https://www.google.com/maps/dir/?api=1&destination=Ishikawacho+Station" target="_blank" rel="noopener">🧭 開始導航</a></div></li>
 
-        <li class="stop"><div class="stop-time">09:30<br><span>17:00</span></div><div class="stop-dot-wrap"><div class="stop-dot"></div></div>
+        <li class="stop"><div class="stop-time">09:30</div><div class="stop-dot-wrap"><div class="stop-dot"></div></div>
           <div class="stop-body"><div class="stop-head"><span class="tag tag-景點">景點</span><h4>山手西洋館</h4></div>
           <p class="stop-addr">橫濱山手西洋館, Yokohama, Kanagawa</p>
           <div class="stop-metaline"><span>營業09:30–17:00</span></div>
           <a class="map-btn" href="https://www.google.com/maps/dir/?api=1&destination=%E6%A9%AB%E6%BF%B1%E5%B1%B1%E6%89%8B%E8%A5%BF%E6%B4%8B%E9%A4%A8" target="_blank" rel="noopener">🧭 開始導航</a></div></li>
 
-        <li class="stop"><div class="stop-time">11:00<br><span>18:00</span></div><div class="stop-dot-wrap"><div class="stop-dot"></div></div>
+        <li class="stop"><div class="stop-time">11:00</div><div class="stop-dot-wrap"><div class="stop-dot"></div></div>
           <div class="stop-body"><div class="stop-head"><span class="tag tag-用餐">用餐</span><h4>Elysee Hikaru（雞蛋布丁）</h4></div>
           <p class="stop-addr">Elysee Hikaru, Yokohama, Kanagawa</p>
           <div class="stop-metaline"><span>營業11:00–18:00（星期三公休）</span></div>
           <a class="map-btn" href="https://www.google.com/maps/dir/?api=1&destination=Elysee+Hikaru+Yokohama" target="_blank" rel="noopener">🧭 開始導航</a></div></li>
 
-        <li class="stop"><div class="stop-time">11:00<br><span>20:00</span></div><div class="stop-dot-wrap"><div class="stop-dot"></div></div>
+        <li class="stop"><div class="stop-time">13:00</div><div class="stop-dot-wrap"><div class="stop-dot"></div></div>
+          <div class="stop-body"><div class="stop-head"><span class="tag tag-移動">移動</span><h4>山手 → 港未來一帶</h4></div>
+          <p class="stop-addr">石川町駅 → 港未來/馬車道駅一帶</p>
+          <div class="stop-metaline"><span>🚆 電車約10分鐘</span></div>
+          <a class="map-btn" href="https://www.google.com/maps/dir/?api=1&destination=Minato+Mirai+21+Yokohama" target="_blank" rel="noopener">🧭 開始導航</a></div></li>
+
+        <li class="stop"><div class="stop-time">13:30<br><span>16:00</span></div><div class="stop-dot-wrap"><div class="stop-dot"></div></div>
+          <div class="stop-body"><div class="stop-head"><span class="tag tag-景點">景點</span><h4>橫濱麵包超人兒童博物館</h4></div>
+          <p class="stop-addr">橫濱麵包超人兒童博物館, Yokohama, Kanagawa</p>
+          <div class="stop-metaline"><span>營業10:00–16:00，這群裡關最早，優先安排</span></div>
+          <a class="map-btn" href="https://www.google.com/maps/dir/?api=1&destination=Yokohama+Anpanman+Children%27s+Museum" target="_blank" rel="noopener">🧭 開始導航</a></div></li>
+
+        <li class="stop"><div class="stop-time">16:15</div><div class="stop-dot-wrap"><div class="stop-dot"></div></div>
+          <div class="stop-body"><div class="stop-head"><span class="tag tag-景點">景點</span><h4>港未來21（Minato Mirai 21）</h4></div>
+          <p class="stop-addr">Minato Mirai 21, Yokohama, Kanagawa</p>
+          <div class="stop-metaline"><span>順道走走拍照，欣賞地標塔與海景</span></div>
+          <a class="map-btn" href="https://www.google.com/maps/dir/?api=1&destination=Minato+Mirai+21+Yokohama" target="_blank" rel="noopener">🧭 開始導航</a></div></li>
+
+        <li class="stop"><div class="stop-time">17:00</div><div class="stop-dot-wrap"><div class="stop-dot"></div></div>
           <div class="stop-body"><div class="stop-head"><span class="tag tag-景點">景點</span><h4>橫濱紅磚倉庫 1・2號館</h4></div>
           <p class="stop-addr">橫濱紅磚倉庫, Yokohama, Kanagawa</p>
           <div class="stop-metaline"><span>1號館11:00–19:00・2號館至20:00</span></div>
           <a class="map-btn" href="https://www.google.com/maps/dir/?api=1&destination=Yokohama+Red+Brick+Warehouse" target="_blank" rel="noopener">🧭 開始導航</a></div></li>
 
-        <li class="stop"><div class="stop-time">10:30<br><span>21:00</span></div><div class="stop-dot-wrap"><div class="stop-dot"></div></div>
+        <li class="stop"><div class="stop-time">18:30</div><div class="stop-dot-wrap"><div class="stop-dot"></div></div>
           <div class="stop-body"><div class="stop-head"><span class="tag tag-購物">購物</span><h4>橫濱世界之窗（World Porters）</h4></div>
           <p class="stop-addr">Yokohama World Porters, Yokohama, Kanagawa</p>
-          <div class="stop-metaline"><span>營業10:30–21:00</span></div>
+          <div class="stop-metaline"><span>營業10:30–21:00，這群裡開最晚，排最後最保險</span></div>
           <a class="map-btn" href="https://www.google.com/maps/dir/?api=1&destination=Yokohama+World+Porters" target="_blank" rel="noopener">🧭 開始導航</a></div></li>
-
-        <li class="stop"><div class="stop-time">10:00<br><span>16:00</span></div><div class="stop-dot-wrap"><div class="stop-dot"></div></div>
-          <div class="stop-body"><div class="stop-head"><span class="tag tag-景點">景點</span><h4>橫濱麵包超人兒童博物館</h4></div>
-          <p class="stop-addr">橫濱麵包超人兒童博物館, Yokohama, Kanagawa</p>
-          <div class="stop-metaline"><span>營業10:00–16:00</span></div>
-          <a class="map-btn" href="https://www.google.com/maps/dir/?api=1&destination=Yokohama+Anpanman+Children%27s+Museum" target="_blank" rel="noopener">🧭 開始導航</a></div></li>
 
         <li class="stop"><div class="stop-time">回程後</div><div class="stop-dot-wrap"><div class="stop-dot"></div></div>
           <div class="stop-body"><div class="stop-head"><span class="tag tag-移動">移動</span><h4>返回大久保・夜生活自由安排</h4></div>
@@ -1244,8 +1328,22 @@
     <h2>🧳 行李清單</h2>
     <p>勾選後會記住進度（本機儲存），下次打開不用重新勾。</p>
   </div>
-  <section class="checklist">
+    <section class="checklist">
     <h2>🍁 出發前確認 Checklist</h2>
+
+    <label class="vjw-card">
+      <input type="checkbox" class="vjw-checkbox">
+      <div class="vjw-card-top">
+        <span class="vjw-chip">🍁</span>
+        <span class="vjw-badge">JAPAN ENTRY</span>
+      </div>
+      <div class="vjw-card-title">Visit Japan Web</div>
+      <div class="vjw-card-sub">入境資料線上申請</div>
+      <div class="vjw-card-bottom">
+        <a href="https://www.vjw.digital.go.jp/main/#/vjwplo001" target="_blank" rel="noopener" class="vjw-link">前往填寫 →</a>
+        <span class="vjw-check-mark">✓ 已完成</span>
+      </div>
+    </label>
 
         <div class="check-group">
     <button type="button" class="check-sub" data-group="must">
@@ -1289,10 +1387,6 @@
     <label class="check-item">
       <input type="checkbox">
       <span class="check-text">🏷️ AirTag</span>
-    </label>
-    <label class="check-item">
-      <input type="checkbox">
-      <span class="check-text">📱 填寫 <a href="https://www.vjw.digital.go.jp/main/#/vjwplo001" target="_blank" rel="noopener">Visit Japan Web</a>（VJW）</span>
     </label>
     </div>
     </div>
@@ -1494,13 +1588,12 @@
 
 <!-- 底部導航列 -->
 <nav class="bottom-nav" aria-label="主要功能">
-  <button type="button" class="nav-item active" data-view="view-itinerary"><span class="ni-icon">📅</span><span class="ni-label">每日行程</span></button>
-  <button type="button" class="nav-item" data-view="view-transport"><span class="ni-icon">🚌</span><span class="ni-label">交通</span></button>
-  <button type="button" class="nav-item" data-view="view-lodging"><span class="ni-icon">🏨</span><span class="ni-label">住宿</span></button>
-  <button type="button" class="nav-item" data-view="view-packing"><span class="ni-icon">🧳</span><span class="ni-label">行李</span></button>
-  <button type="button" class="nav-item" data-view="view-budget"><span class="ni-icon">💰</span><span class="ni-label">預算</span></button>
-</nav>
-</div>
+  <button type="button" class="nav-item active" data-view="view-itinerary"><span class="ni-icon">🗾</span><span class="ni-label">每日行程</span></button>
+  <button type="button" class="nav-item" data-view="view-transport"><span class="ni-icon">🚅</span><span class="ni-label">交通</span></button>
+  <button type="button" class="nav-item" data-view="view-lodging"><span class="ni-icon">🏮</span><span class="ni-label">住宿</span></button>
+  <button type="button" class="nav-item" data-view="view-packing"><span class="ni-icon">🛄</span><span class="ni-label">行李</span></button>
+  <button type="button" class="nav-item" data-view="view-budget"><span class="ni-icon">💴</span><span class="ni-label">預算</span></button>
+</nav></div>
 
 <button id="backTop" type="button" aria-label="回到頂部">↑</button>
 <button id="leafToggle" type="button" aria-label="開關飄落楓葉">🍁</button>
